@@ -9,7 +9,7 @@ In this lab we got familiar with the arduino. Below is a list of the things that
 
 2.Polling and displaying analog data
 
- Next, we used a potentiometer to input different voltages and printed these values on the screen. We wrote a loop function that would output the circuit's analog value every half-second. 
+  Next, we used a potentiometer to input different voltages and printed these values on the screen. We wrote a loop function that would output the circuit's analog value every half-second. 
 
 
 3.Analog(PWM) output
