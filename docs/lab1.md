@@ -8,11 +8,11 @@ In this lab we got familiar with the arduino. Below is a list of the things that
 
 ***2.Polling and displaying analog data***
   - Next, we used a potentiometer to input different voltages and printed these values on the screen. We wrote a loop function that would output the circuit's analog value every half-second.
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/ZsglpwnNFWA" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 ***3.Analog(PWM) output***
   - Once we understood how to use analog, we used PWM to create a 'analog output'. We used an LED attached to a digial pin to set it up as an output pin, and used the analog value from the potentiometer to change the brightness of the LED.
-  <iframe width="640" height="480" src="https://www.youtube.com/watch?v=7_lrMVkOdfE" frameborder="0" allowfullscreen></iframe>
+  <iframe width="640" height="480" src="https://www.youtube.com/embed/ZsglpwnNFWA" frameborder="0" allowfullscreen></iframe>
   
 ***4.Servo Motor Control***
   - We then moved onto the Parallax Servos. We used the Arduino `Servo.h` library for all the functions and were able to control the motor speed using a potentiometer.
