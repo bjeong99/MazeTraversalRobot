@@ -61,7 +61,6 @@ int input=map(value, 0, 1014, 0, 255);
 
 * We then moved onto the Parallax Servos. We used the Arduino `Servo.h` library for all the functions and were able to control the motor speed using a potentiometer.
 
-* We added in the Servo library and created a Servo object to represent our Parallax Servo.
 ```cpp
 #include <Servo.h> 
 Servo mtr;
