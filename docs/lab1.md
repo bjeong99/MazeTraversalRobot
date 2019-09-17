@@ -5,9 +5,9 @@ In this lab we got familiar with the arduino. Below is a list of the things that
 
 ***1.Blinking an LED***
 
-We modified the blink sketch provided by the Arduino program to work for an external LED rather than the LED on the Arduino board. We tested this modified code on all the digital pins.
+  We modified the blink sketch provided by the Arduino program to work for an external LED rather than the LED on the Arduino board. We tested this modified code on all the digital pins.
 
-We connected the LED to pin 5 and modified the blink code to alternate the state of the LED digital pin.
+  We connected the LED to pin 5 and modified the blink code to alternate the state of the LED digital pin.
 ```cpp
 void loop() {
   digitalWrite(newLED, HIGH);   // turn the LED on (HIGH is the voltage level)
@@ -18,9 +18,9 @@ void loop() {
 ```
 
 ***2.Polling and displaying analog data***
-Next, we used a potentiometer to input different voltages and printed these values on the screen. We wrote a loop function that would output the circuit's analog value every half-second.
+  Next, we used a potentiometer to input different voltages and printed these values on the screen. We wrote a loop function that would output the circuit's analog value every half-second.
 
-We first started by intializing the pin that would be connected to the potentiometer and a global variable that would hold the potentiometer value.
+  We first started by intializing the pin that would be connected to the potentiometer and a global variable that would hold the potentiometer value.
 ```cpp
 int pin = A3;
 int val = 0;
@@ -30,7 +30,7 @@ void setup() {
   Serial.begin(9600);
 }
 ```
-We then can print this out to the serial monitor
+  We then can print this out to the serial monitor
 ```cpp
 void loop() {
   // put your main code here, to run repeatedly:
@@ -43,9 +43,9 @@ void loop() {
 
 ***3.Analog(PWM) output***
 
-Once we understood how to use analog, we used PWM to create a 'analog output'. We used an LED attached to a digial pin to set it up as an output pin, and used the analog value from the potentiometer to change the brightness of the LED.
+  Once we understood how to use analog, we used PWM to create a 'analog output'. We used an LED attached to a digial pin to set it up as an output pin, and used the analog value from the potentiometer to change the brightness of the LED.
 
-We added in an digital output to pin 5.
+  We added in an digital output to pin 5.
 ```cpp
 int OUT = 5;
 ```
