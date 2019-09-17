@@ -18,9 +18,10 @@ void loop() {
 ```
 
 ***2.Polling and displaying analog data***
-  Next, we used a potentiometer to input different voltages and printed these values on the screen. We wrote a loop function that would output the circuit's analog value every half-second.
 
-  We first started by intializing the pin that would be connected to the potentiometer and a global variable that would hold the potentiometer value.
+* Next, we used a potentiometer to input different voltages and printed these values on the screen. We wrote a loop function that would output the circuit's analog value every half-second.
+
+* We first started by intializing the pin that would be connected to the potentiometer and a global variable that would hold the potentiometer value.
 ```cpp
 int pin = A3;
 int val = 0;
@@ -30,7 +31,7 @@ void setup() {
   Serial.begin(9600);
 }
 ```
-  We then can print this out to the serial monitor
+* We then can print this out to the serial monitor
 ```cpp
 void loop() {
   // put your main code here, to run repeatedly:
@@ -43,14 +44,13 @@ void loop() {
 
 ***3.Analog(PWM) output***
 
-  Once we understood how to use analog, we used PWM to create a 'analog output'. We used an LED attached to a digial pin to set it up as an output pin, and used the analog value from the potentiometer to change the brightness of the LED.
+* Once we understood how to use analog, we used PWM to create a 'analog output'. We used an LED attached to a digial pin to set it up as an output pin, and used the analog value from the potentiometer to change the brightness of the LED.
 
-  We added in an digital output to pin 5.
+* We added in an digital output to pin 5.
 ```cpp
 int OUT = 5;
 ```
-
-We then mapped the potentiometer value to the LED, and we scaled down the values to the appropriate duty cycle.
+* We then mapped the potentiometer value to the LED, and we scaled down the values to the appropriate duty cycle.
 ```cpp
 int input=map(value, 0, 1014, 0, 255);
 ```
