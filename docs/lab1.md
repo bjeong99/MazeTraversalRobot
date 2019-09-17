@@ -5,9 +5,9 @@ In this lab we got familiar with the arduino. Below is a list of the things that
 
 ***1.Blinking an LED***
 
-   We modified the blink sketch provided by the Arduino program to work for an external LED rather than the LED on the Arduino board. We tested this modified code on all the digital pins.
+* We modified the blink sketch provided by the Arduino program to work for an external LED rather than the LED on the Arduino board. We tested this modified code on all the digital pins.
 
-   We connected the LED to pin 5 and modified the blink code to alternate the state of the LED digital pin.
+* We connected the LED to pin 5 and modified the blink code to alternate the state of the LED digital pin.
 ```cpp
 void loop() {
   digitalWrite(newLED, HIGH);   // turn the LED on (HIGH is the voltage level)
