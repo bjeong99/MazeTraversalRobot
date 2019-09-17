@@ -68,7 +68,7 @@ int input=map(value, 0, 1014, 0, 255);
 Servo mtr;
 ```
 * We then wrote the value of the potentiometer to the servo using the `Servo.write()` function.
-```cp
+```cpp
 mtr.write(val);   // adjusts the servo speed and direction based on the potentiometer value
 delay(20); 
 ```
