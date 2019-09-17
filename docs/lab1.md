@@ -58,15 +58,16 @@ int input=map(value, 0, 1014, 0, 255);
   <iframe width="640" height="480" src="https://www.youtube.com/embed/7_lrMVkOdfE" frameborder="0" allowfullscreen></iframe>
   
 ***4.Servo Motor Control***
-We then moved onto the Parallax Servos. We used the Arduino `Servo.h` library for all the functions and were able to control the motor speed using a potentiometer.
+
+* We then moved onto the Parallax Servos. We used the Arduino `Servo.h` library for all the functions and were able to control the motor speed using a potentiometer.
   
-We added in the Servo library and created a Servo object to represent our Parallax Servo.
+* We added in the Servo library and created a Servo object to represent our Parallax Servo.
 ```cpp
 #include <Servo.h> 
 
 Servo mtr;
 ```
-We then wrote the value of the potentiometer to the servo using the `Servo.write()` function.
+* We then wrote the value of the potentiometer to the servo using the `Servo.write()` function.
 ```cp
 mtr.write(val);   // adjusts the servo speed and direction based on the potentiometer value
 delay(20); 
@@ -76,19 +77,19 @@ delay(20);
 ***5.Assembling and Running our Robot***
 We made the skeleton of our robot with the provided chassis, battery, and ball bearings. We had some trouble trying to figure out a good set up for robot since it had two layers (one for breadboard, one for the Arduino). We were able to make the robot loop through a sequence of stopping, turning, and driving. 
   
-We first created two Servo objects, one for the left servo and one for the right servo
+* We first created two Servo objects, one for the left servo and one for the right servo
 ```cpp
 Servo mtrL;
 Servo mtrR;
 ```
-We then attached the Servo to pins 9 and 10 in the `setup()` function.
+* We then attached the Servo to pins 9 and 10 in the `setup()` function.
 ```cpp
 void setup() {
   mtrL.attach(9);
   mtrR.attach(10);
 }
 ```
-We then wrote the sequence of running, stopping, and turning. We did this by varying the argument in the `Servo.write()` function; 90 means no motion the values range to a min of 0 and max of 180.
+* We then wrote the sequence of running, stopping, and turning. We did this by varying the argument in the `Servo.write()` function; 90 means no motion the values range to a min of 0 and max of 180.
 ```cpp
 void loop() {
   mtrL.write(0);
