@@ -15,4 +15,7 @@
 # Process #
 
 1. Our initial design had to be changed. Before we started the milstone, we had two S-shaped pillars that would hold the left and right line sensors in place and the third one was attached to the pillar that housed the ball bearing. However, this was a problem because the heights of the sensors were not uniform; we discovered that the different heights would affect the output values of whether the sensors were detecting dark colors and light colors. 
-<img src="IMG_5232.png" height="60%" width="60%">
+<figure>
+   <img src="IMG_5232.png" height="60%" width="60%">
+   <figcaption align="center">Previous Design</figcaption>
+</figure>
