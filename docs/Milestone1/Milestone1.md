@@ -65,6 +65,11 @@ void loop()
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/dLYaa0ZTXIk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
+7. Next, we tackled on the challenge of turning on an intersection. We knew that the robot would have to turn if all three sensors were activated (indicating an intersection). We made two more functions called hardRight() and hardLeft(). After many trials, we discovered that to make the best turn at an intersection, one wheel would have to rotate forward fast, and the other would slightly rotate backwards. To test this function and its durability, we let the robot continuously rotate in a circle, which was a combination of our code for traversing a line and the code for rotating at an intersection.
 
-7. Next, we tackled on the challenge of turning on an intersection. We knew that the robot would have to turn if all three sensors were activated (indicating an intersection). We made two more functions called hardRight() and hardLeft(). After many trials, we discovered that to make the best turn at an intersection, one wheel would have to rotate forward fast, and the other would slightly rotate backwards. To test this function and its durability, we let the robot continuously rotate in a circle.
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ygiE4MoYcr0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+8. 
+
+
 
