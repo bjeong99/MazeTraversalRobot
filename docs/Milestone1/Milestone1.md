@@ -61,6 +61,10 @@ void loop()
    
 5. Next, we brainstormed a way to ensure that the robot could stay on the line. By using the isOn() function on each of the sensors, we can detect where the robot is relative to the grid line and slightly turn left or right to get back on the line again. Because the line sensors are spaced out to the width of the line, we used if else statements for each scenario. For example, if only the center sensor is activated, then the robot is on the line and it continues going forward. If the left sensor is on but the right sensor is off, then the robot is slightly to the right of the line and it will slightly turn to the left. And so forth.
 
-6. We then coded the functions that would make the robot turn slightly left or slightly right. These functions were similar to the goFor() function, but the values were slightly tweaked to make one wheel turn faster.
+6. We then coded the functions that would make the robot turn slightly left or slightly right. These functions were similar to the goFor() function, but the values were slightly tweaked to make one wheel turn faster. With the logic and Servo functions in place, the robot was able to traverse the line with relative ease and multiple tests ensured the durability of our code.
 
-7. Next, we tackled on the challenge of turning on an intersection. We knew that the robot would have to turn if all three sensors were activated (indicating an intersection). We made two more functions called hardRight() and hardLeft(). After many trials, we discovered that to make the best turn at an intersection, one wheel would have to rotate forward fast, and the other would slightly rotate backwards. To test this function and it's durability, we let the robot continuously rotate in a circle.
+<iframe width="640" height="480" src="https://www.youtube.com/embed/ZsglpwnNFWA" frameborder="0" allowfullscreen></iframe>
+
+
+7. Next, we tackled on the challenge of turning on an intersection. We knew that the robot would have to turn if all three sensors were activated (indicating an intersection). We made two more functions called hardRight() and hardLeft(). After many trials, we discovered that to make the best turn at an intersection, one wheel would have to rotate forward fast, and the other would slightly rotate backwards. To test this function and its durability, we let the robot continuously rotate in a circle.
+
