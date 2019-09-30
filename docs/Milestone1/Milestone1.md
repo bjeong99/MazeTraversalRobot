@@ -23,6 +23,12 @@
    <a>Previous Design</a>
 </p>
 
+<p align="center">
+   <img src="IMG_6779.png" height="60%" width="60%">
+   <br>
+   <a>Current Design</a>
+</p>
+
    We changed the design to include a third S-pillar that would hold the center line sensor and keep all three sensors aligned.
    
 3. Our next step was making sure the sensors were properly working. In our code, we first started off with debug functions.
@@ -69,7 +75,11 @@ void loop()
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/ygiE4MoYcr0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-8. 
+8. Finally, we tackled on making the robot make a figure 8. We used cases and a counter to determine which way to turn.
+```cpp
+ switch(k) {
+     case 1: ...
+```
 
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/gOGfBiWHEYg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
