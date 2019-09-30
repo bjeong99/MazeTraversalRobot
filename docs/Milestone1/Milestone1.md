@@ -63,7 +63,7 @@ void loop()
 
 6. We then coded the functions that would make the robot turn slightly left or slightly right. These functions were similar to the goFor() function, but the values were slightly tweaked to make one wheel turn faster. With the logic and Servo functions in place, the robot was able to traverse the line with relative ease and multiple tests ensured the durability of our code.
 
-<iframe width="640" height="480" src="https://www.youtube.com/embed/ZsglpwnNFWA" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/dLYaa0ZTXIk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
 7. Next, we tackled on the challenge of turning on an intersection. We knew that the robot would have to turn if all three sensors were activated (indicating an intersection). We made two more functions called hardRight() and hardLeft(). After many trials, we discovered that to make the best turn at an intersection, one wheel would have to rotate forward fast, and the other would slightly rotate backwards. To test this function and its durability, we let the robot continuously rotate in a circle.
