@@ -79,10 +79,32 @@ void loop()
    <iframe width="560" height="315" src="https://www.youtube.com/embed/ygiE4MoYcr0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </p>
 
-8. Finally, we tackled on making the robot make a figure 8. We used cases and a counter to determine which way to turn.
+8. Finally, we tackled on making the robot make a figure 8. We used cases and a counter to determine which way to turn. These case statements acted as "steps" so we could iterate through a defined list of turns. Every single case contains a turn, as well as the logic for when the turn is complete. Once the turn is reconized as complete, our robot would increment the case counter, and would resume standard line following.
 ```cpp
  switch(k) {
-     case 1: ...
+     case 1:
+      if (isOn(C) && isOn(L) && isOn(R)){
+        hardLeft();
+       while(isOn(C)) 
+         C = analogRead(lightC);
+        while(isOn(R)) 
+          R = analogRead(lightR);
+        while(!isOn(R)) 
+          R = analogRead(lightR);
+        goStop();
+        k++;
+      }
+        break;
+      case 2:
+       if (isOn(C) && isOn(L) && isOn(R)){
+        hardRight();
+        while(isOn(C)) C = analogRead(lightC);
+        while(isOn(L)) L = analogRead(lightL);
+        while(!isOn(L)) L = analogRead(lightL);
+        goStop();
+        k++;
+       }
+        break;
 ```
 <p align="center">
    <iframe width="560" height="315" src="https://www.youtube.com/embed/gOGfBiWHEYg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
