@@ -1,7 +1,7 @@
 # Lab 2
 ## Monday 09/16/2019
 
-*** FFT on the Arduino***
+***FFT on the Arduino***
 
 In this lab we implemented a Fast-Fourier-Transform (FFT) to identify a specific tone that is to eventually be generated as a start tone at competition. This was done by using the Arduino FFT Library, polling an analog audio sensor, along with multiple filters, both digital and analog.
 
