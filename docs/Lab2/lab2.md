@@ -73,7 +73,9 @@ Equation 1.3: H1(jw) = (-j * w * R2 * C1 )/ ((1+j * w * R1 * C1 ) + (1 + j * w *
 For the inverting op amp, we placed R1 on the inverting input terminal and R2 on the feedback loop. We wanted an absolute value gain of 10, so R2 = 10 kOhms and R1 = 1kOhm. The transfer function of the inverting op amp is shown in Equation 1.4. By cascading the two op amp circuits, we multiply the transfer functions of the two circuits, obtaining an overall transfer function equation shown in Equations 1.5 and 1.6. Equation 1.6 is a band pass filter with a mid bandpass region gain of 10 ( roughly 20 dB).
 
 Equation 1.4: Av2 = -(R2/R1)
+
 Equation 1.5: H(jw) = Av2 * H1(jw)
+
 Equation 1.6: H(jw) = ((R2/R1) * (j * w * R2 * C1)) / ((1 + j * w * R1 * C1 ) + (1 + j * w * R2 * C2 ))
 
 
