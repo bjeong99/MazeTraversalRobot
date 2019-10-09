@@ -62,18 +62,19 @@ As you can see in the second image of the FFT, there is a very distinct peak rig
 For our filtering circuitry, we decided to go with an active band pass filter. This filter consists of two main elements, a high pass filter on the input, and a low pass filter on the output. The schematic is shown below. This circuit is what we are using for two of the three circuitry components in lab, the op amp circuit and our RC filter. Our third circuit was a non inverting amplifier.
 
 <p align="center">
-   <img src="BPF.png" height="60%" width="60%">
+   <img src="BPF.PNG" height="60%" width="60%">
    <br>
    <a>Schematic of the Band pass filter</a>
 </p>
 
 
 <p align="center">
-   <img src="nonINV.png" height="60%" width="60%">
+   <img src="nonINV.PNG" height="60%" width="60%">
    <br>
    <a>Schematic of the Non Inverting Op Amp</a>
 </p>
 
+Below is the Bode plot for the cascaded filter. It has almost the gain that we desired, of course things in real life wont work out quite as nicely as on paper. The vertical line shows 950Hz.
 <p align="center">
    <img src="plot.jpg" height="60%" width="60%">
    <br>
