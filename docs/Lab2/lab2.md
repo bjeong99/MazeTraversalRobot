@@ -61,6 +61,22 @@ As you can see in the second image of the FFT, there is a very distinct peak rig
 
 For our filtering circuitry, we decided to go with an active band pass filter. This filter consists of two main elements, a high pass filter on the input, and a low pass filter on the output. The schematic is shown below. This circuit is what we are using for two of the three circuitry components in lab, the op amp circuit and our RC filter. Our third circuit was a Inverting amplifier to reinvert the signal and to add a gain of +20dB. We were able to use the inverting amplifier configuration for the band pass filter as we put a DC bias on the speak. By adding a resistor divider on the speaker ground port that divided Vdd (5V) by 2, we were able to make the amplifiers radiometric about 2.5V.
 
+For the bandpass circuit, we placed placed a series RC combination on the inverting input of the op amp and a parallel RC combination on the feedback loop of the op amp. The series combination gave us the high pass filter and the parallel combination gave us the low pass filter. Cascading high pass and low pass together creates a bandpass filter. We designed the op amp to only accept frequencies between the range of 150 Hz and 1.5 kHz. To do this, we used Equation 1.1. Rearranging Equation 1.1 gave us equation 1.2. Using these equations at fB = 150 and fB = 1.5 kHz, respectively, we get that C1 = .7uF and C2 = .1uF. 
+
+Equation 1.1: fB = (1/(2 * pi * R * C ))
+Equation 1.2: C = (1/(2* fB * pi * R ))
+
+Using the Node-Voltage Method for Circuit Analysis, we determined that the transfer function of the Bandpass Filter is stated in Equation 1.3. After designing, creating, and testing the active bandpass filter, we cascaded the output of the bandpass filter into an inverting op amp configuration.
+
+Equation 1.3: H1(jw) = (-j * w * R2 * C1 )/ ((1+j * w * R1 * C1 ) + (1 + j * w * R2 * C2)). 
+
+For the inverting op amp, we placed R1 on the inverting input terminal and R2 on the feedback loop. We wanted an absolute value gain of 10, so R2 = 10 kOhms and R1 = 1kOhm. The transfer function of the inverting op amp is shown in Equation 1.4. By cascading the two op amp circuits, we multiply the transfer functions of the two circuits, obtaining an overall transfer function equation shown in Equations 1.5 and 1.6. Equation 1.6 is a band pass filter with a mid bandpass region gain of 10 ( roughly 20 dB).
+
+Equation 1.4: Av2 = -(R2/R1)
+Equation 1.5: H(jw) = Av2 * H1(jw)
+Equation 1.6: H(jw) = ((R2/R1) * (j * w * R2 * C1)) / ((1 + j * w * R1 * C1 ) + (1 + j * w * R2 * C2 ))
+
+
 <p align="center">
    <img src="BPF.PNG" height="60%" width="60%">
    <br>
