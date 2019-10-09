@@ -1,6 +1,8 @@
 # Lab 2
 ## Monday 09/16/2019
 
+*** FFT on the Arduino***
+
 In this lab we implemented a Fast-Fourier-Transform (FFT) to identify a specific tone that is to eventually be generated as a start tone at competition. This was done by using the Arduino FFT Library, polling an analog audio sensor, along with multiple filters, both digital and analog.
 
 To get the microphone working, we first started with the stock schematic that was provided to us on the lab 2 website. This schematic is shown below. With the microphone wired to analog pin A0, we were then able to use the FFT library from Arduino to get the Fast-Fourier Transform of the audio. This code is parsed below.
@@ -55,3 +57,25 @@ We ended up using a double comparison for the fft magnitude so as to rule out ou
 
 As you can see in the second image of the FFT, there is a very distinct peak right after the harmonic frequency. This is the spike for 950Hz being played. It appears so close to the fundemental because n = 7 where n can range from 0 to 128.
 
+***Filtering out the Noise***
+
+For our filtering circuitry, we decided to go with an active band pass filter. This filter consists of two main elements, a high pass filter on the input, and a low pass filter on the output. The schematic is shown below. This circuit is what we are using for two of the three circuitry components in lab, the op amp circuit and our RC filter. Our third circuit was a non inverting amplifier.
+
+<p align="center">
+   <img src="BPF.png" height="60%" width="60%">
+   <br>
+   <a>Schematic of the Band pass filter</a>
+</p>
+
+
+<p align="center">
+   <img src="nonINV.png" height="60%" width="60%">
+   <br>
+   <a>Schematic of the Non Inverting Op Amp</a>
+</p>
+
+<p align="center">
+   <img src="plot.jpg" height="60%" width="60%">
+   <br>
+   <a>Bode Plot of cascaded filter design</a>
+</p>
