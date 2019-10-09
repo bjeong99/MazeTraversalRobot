@@ -55,5 +55,3 @@ We ended up using a double comparison for the fft magnitude so as to rule out ou
 
 As you can see in the second image of the FFT, there is a very distinct peak right after the harmonic frequency. This is the spike for 950Hz being played. It appears so close to the fundemental because n = 7 where n can range from 0 to 128.
 
-***3. Filtering the incoming signal***
-
