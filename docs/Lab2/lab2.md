@@ -59,7 +59,7 @@ As you can see in the second image of the FFT, there is a very distinct peak rig
 
 ***Filtering out the Noise***
 
-For our filtering circuitry, we decided to go with an active band pass filter. This filter consists of two main elements, a high pass filter on the input, and a low pass filter on the output. The schematic is shown below. This circuit is what we are using for two of the three circuitry components in lab, the op amp circuit and our RC filter. Our third circuit was a non inverting amplifier.
+For our filtering circuitry, we decided to go with an active band pass filter. This filter consists of two main elements, a high pass filter on the input, and a low pass filter on the output. The schematic is shown below. This circuit is what we are using for two of the three circuitry components in lab, the op amp circuit and our RC filter. Our third circuit was a Inverting amplifier to reinvert the signal and to add a gain of +20dB. We were able to use the inverting amplifier configuration for the band pass filter as we put a DC bias on the speak. By adding a resistor divider on the speaker ground port that divided Vdd (5V) by 2, we were able to make the amplifiers radiometric about 2.5V.
 
 <p align="center">
    <img src="BPF.PNG" height="60%" width="60%">
@@ -69,9 +69,9 @@ For our filtering circuitry, we decided to go with an active band pass filter. T
 
 
 <p align="center">
-   <img src="nonINV.PNG" height="60%" width="60%">
+   <img src="INV.PNG" height="60%" width="60%">
    <br>
-   <a>Schematic of the Non Inverting Op Amp</a>
+   <a>Schematic of the Inverting Op Amp</a>
 </p>
 
 Below is the Bode plot for the cascaded filter. It has almost the gain that we desired, of course things in real life wont work out quite as nicely as on paper. The vertical line shows 950Hz.
