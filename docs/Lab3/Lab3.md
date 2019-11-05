@@ -1,4 +1,4 @@
-#Lab 3
+# Lab 3
 ## Monday 11/4/2019
 
 In this lab, we used a parallel interface to connect the arduino to a DE0-NANO FPGA board in order to display an arduino input on the monitor using a VGA connection between the monitor and the FPGA. Below includes the connection between the base station's arduino and the FPGA, and the drawing on the monitor based on input from arduino to FPGA. 
@@ -13,7 +13,13 @@ In order to connect the arduino to the FPGA, we knew that we needed to create a 
   <a>Voltage Divider Schematic</a>
 </p>
 
-We opted to use a parallel bus to the FPGA due to multiple factors, the main factor being developement time for the FPGA. Traditional serial buses, such as SPI and I2C, would have to be implemented with code from other sources which would take time to understand and interface with the code. Making our own IP core would take longer than this class runs. In contrast, a parallel data bus allows a quick startup time for the FPGA, allowing for longer amounts of time to debug and test with the arduino.
+We opted to use a parallel bus to the FPGA due to multiple factors, the main factor being developement time for the FPGA. Traditional serial buses, such as SPI and I2C, would have to be implemented with code from other sources which would take time to understand and interface with the code. Making our own IP core would take longer than this class runs. In contrast, a parallel data bus allows a quick startup time for the FPGA, allowing for longer amounts of time to debug and test with the arduino. The configuration is shown below:
+
+<p align="center">
+  <img src="setup.jpg" height="60%" width="60%">
+  <br>
+  <a>Picture of FPGA to microcontroller interface</a>
+</p>
 
 ***3. The FPGA Interface***
 
