@@ -35,7 +35,8 @@ To create the parallel bus reciever, we first created an always block that would
 wire 			arduino_in; //Incoming clock signal
 assign arduino_in = GPIO_1_D[33];
 
-wire [7:0] arduino_di;  //Incoming data line                           assign arduino_di = GPIO_1_D[31:24];
+wire [7:0] arduino_di;  //Incoming data line                           
+assign arduino_di = GPIO_1_D[31:24];
 
 reg             update;
 
