@@ -74,7 +74,7 @@ end
 ```
 In the synchronous always block above, the FPGA checks to see if the update flag is high. If the flag is high, it begins to update the values of the MK9 dual port ram with the color input. It then walks all the way through each pixel in the MK9 ram, updating their values from left to right, top to bottom. Once the memory overflows, it stops the updating, reseting X_ADDR, Y_ADDR, and the W_EN flag. This allows for every single pixel on the screen to be updated via a single byte fro the arduino. The only requirement of this is that the parallel bus maintain its value for the duration of the update, which is verified by the arduino code in the next section. 
 
-***2. Using the Arduino to transmit data to the FPGA***
+***3. Using the Arduino to transmit data to the FPGA***
 
 To be able to transmit data to the FPGA over our our parallel bus, we wrote a quick test script that contained a parallel bus write function shown below.
 
@@ -97,3 +97,7 @@ void parallelWrite(int n){
 }
 ```
 The above function would be called whenever a serial transmission was recieved from the serial monitor. The function can take in any value int, but will only output the least significant 7 bits if the number. The function itself is atomic as if it were interrupted or yielded to another process, one of the GPIO pins could be modified, and casue the 7bits to not be transmitted correctly. This will come into play when the radio recieves packets, which will most likely trigger an ISR. The core functionality of the function is the loop that iterates from the 0th bit of the int to the 6th bit, writing to the GPIO bus with each sucessive loop. This was tested by using the Oscilliscope to measure the length of the clock pulse, as well as the Multimeter to check the values of each bit in the bus.
+
+***4. Final Results***
+
+In the end, we were able to change the display color on the monitor via the serial terminal of the Arduino. This code will eventually be able to be used to display to the incoming packets from the radio module. The robustness of the arduino code combined with the easy to use FPGA interface will allow to quickly develop extra features as we get closer and closer to the competition. Below is a demo video of the system:
