@@ -5,7 +5,13 @@ In this lab, we used a parallel interface to connect the arduino to a DE0-NANO F
 
 ***1. Connection between Base Station's Arduino and FPGA***
 
-In order to connect the arduino to the FPGA, we knew that we needed to create a voltage divider using resistances. The arduino outputs a 5V signal on high and the FPGA digital logic occurs at 3.3V. If we directly connected the arduino pins to the FPGA GPIO_1 pins, we would fry the FPGA. We knew that we needed 9 connections ( 8 for input color from arduino, 1 for the clock signal). We obtained 9 1.8 kilo Ohm resistors and 9 1 kilo Ohm resistors, and created a voltage divider on each output pin of the arduino. We 
+In order to connect the arduino to the FPGA, we knew that we needed to create a voltage divider using resistances. The arduino outputs a 5V signal on high and the FPGA digital logic occurs at 3.3V. If we directly connected the arduino pins to the FPGA GPIO_1 pins, we would fry the FPGA. We knew that we needed 9 connections ( 8 for input color from arduino, 1 for the clock signal). We obtained nine 1.8 kilo Ohm resistors and nine 1 kilo Ohm resistors, and created a voltage divider on each output pin of the arduino. Attached below is a schematic for the voltage divider and the picture of the voltage divider.
+
+<p align="center">
+  <img src="Schematic_9Pin_Arduino_to_FPGA.JPG" height="60%" width="60%">
+  <br>
+  <a>Voltage Divider Schematic</a>
+</p>
 
 In order to obtain this connection, we first downloaded the Lab 4 Template from the course website. This code included the DE0-NANO.v, IMAGE_PROCESSOR.v, Dual_Port_RAM_M9K.v, and the VGA_DRIVER.v. From this base code, the DE0-NANO.v code was the top level module which instantiated IMAGE_PROCESSOR.v, Dual_Port_RAM_M9K.v, and VGA_DRIVER.v. After downloading this, we focused on instantiating the clock using the pll tool from IP Catalog. 
 
