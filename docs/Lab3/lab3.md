@@ -101,3 +101,7 @@ The above function would be called whenever a serial transmission was recieved f
 ***4. Final Results***
 
 In the end, we were able to change the display color on the monitor via the serial terminal of the Arduino. This code will eventually be able to be used to display to the incoming packets from the radio module. The robustness of the arduino code combined with the easy to use FPGA interface will allow to quickly develop extra features as we get closer and closer to the competition. Below is a demo video of the system:
+
+<p align="center">
+   <iframe width="560" height="315" src="https://youtu.be/0hZK-8oFP6Q" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</p>
