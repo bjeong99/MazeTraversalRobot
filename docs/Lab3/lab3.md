@@ -21,7 +21,7 @@ We opted to use a parallel bus to the FPGA due to multiple factors, the main fac
   <a>Picture of FPGA to microcontroller interface</a>
 </p>
 
-***3. The FPGA Interface***
+***2. The FPGA Interface***
 
 In order to obtain this connection, we first downloaded the Lab 4 Template from the course website. This code included the DE0-NANO.v, IMAGE_PROCESSOR.v, Dual_Port_RAM_M9K.v, and the VGA_DRIVER.v. From this base code, the DE0-NANO.v code was the top level module which instantiated IMAGE_PROCESSOR.v, Dual_Port_RAM_M9K.v, and VGA_DRIVER.v. After downloading this, we focused on instantiating the clock using the pll tool from IP Catalog.
 
