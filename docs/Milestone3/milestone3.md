@@ -109,5 +109,9 @@ if (stack.isEmpty())
     }
 ```
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/fJcBd08CyLw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/fC8wkf0bFOg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 # Improvements
 Some improvements we thought were necessary was changing the design of the robot. The robot does not have a Schmidt trigger and it very top heavy, so the sudden Servo motions make the robot shakea lot. This unwanted movement causes the sensors to incorrectly detect intersetions and grid lines. We also decided that soldering the circuit would be much better. During testing, the wires kept falling off the breadboard and it costed a lot of time to repair the robot many times.
