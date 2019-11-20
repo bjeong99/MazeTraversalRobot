@@ -14,6 +14,7 @@
 ![alt text](https://www.electronicwings.com/public/images/user_images/images/Arduino/IR%20Communication/IR_Communication_1.png)
 
 2. With the new circuit, we were able to read values from a notable distance. We used this code to read the result that came from the phototransistor. 
+
 ```c
 void loop() {
   // put your main code here, to run repeatedly:
@@ -31,6 +32,7 @@ void loop() {
 1. We decided to use DFS instead of BFS. From lecture and researching more online, BFS has the risk of taking up too much memory on the Arduino; the Arduino memory capacity is quite small, so we opted for DFS. 
 
 2. To implement DFS, we decided that we needed a stack to push our visited nodes, a boolean array that represents the whole grid and represents which nodes had already been visited, and a node type that contains x and y coordinates. We also realized that keeping track of cardinal directions was important; DFS depends on orientation and the priority of cardinal directions, so keeping track of the robot's local cardinal direction would make it easier to know which way to turn. Finally, a boolean value called backtrack was necessary to keep track of whether the robot is in DFS mode or backtrack mode.
+
 ```c
 int current_dir;
 // dir
@@ -76,9 +78,8 @@ visited_nodes[current_node.x][current_node.y] = true;
       delay(250);
     }
 ```
-The following bit of code would set the new cardinal direction and push the current node onto the stack (for backtracking) before changing the current coordinate to the prospective coordinate. The code would then tell the robot what direction to move.
+The following bit of code would set the new cardinal direction and push the current node onto the stack (for backtracking) before changing the current coordinate to the prospective coordinate. The code would then tell the robot what direction to move. However, if none of the cases matched, the code would set `backtrack = true`.
 
-   However, if none of the cases matched, the code would set `backtrack = true`.
 ```c
 // north, u turn to south, backtrack
     else
@@ -92,6 +93,7 @@ The following bit of code would set the new cardinal direction and push the curr
 ```
 
 4. In the loop body, if `backtrack == true`, it would then call `backtrack()`. In this function, it peeks at the top node on the stack and receives its coordinates. Because the coordinate that is peeked must always be one step away from the current node (nodes on stack are all one step away from each other and the top node is always one step away from the current node by design), we check the robot's current direction and the direction the robot needs to take to go from the current node to the peeked node. Once the direction is determined, the node is popped off the stack and becomes the current node, a new direction is set, and backtrack is set to false again.
+
 ```c
 node next_node = stack.peek();
   //north
