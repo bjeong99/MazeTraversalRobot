@@ -57,6 +57,7 @@ bool back_track;
 ```
 
 3. To implement DFS, we had to keep track of the current direction and make choices based on direction priority. In the loop, when the robot arrives at an intersection and if `backtrack == false`, then it would call `dfs()`. In `dfs()`, it would set the respective current node in the boolean array as true and check the robot's options. The robot would only proceed to a direction if there is no wall in that direction and if the next node in that direction has not been visited. It would check these options for all direction in the NESW order. 
+
 ```c
 visited_nodes[current_node.x][current_node.y] = true;
   // current_dir = NORTH
