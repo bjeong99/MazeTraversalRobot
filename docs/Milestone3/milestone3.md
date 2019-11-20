@@ -8,8 +8,26 @@
   - existing robot design
   - IR LEDs
   - IR sensor
-  
-# Process
+# Process Robot Detection
+1. For robot detection, we decided to use a 890 nm phototransistor on the robot. When we were first testing the output of the phototransistor to the Arduino, the values we received were too low and would output a maximum value at less than a foot. To correct this, we decided to add a BJT to the circuit.
+
+![alt text](https://www.electronicwings.com/public/images/user_images/images/Arduino/IR%20Communication/IR_Communication_1.png)
+
+2. With the new circuit, we were able to read values from a notable distance. We used this code to read the result that came from the phototransistor. 
+```c
+void loop() {
+  // put your main code here, to run repeatedly:
+  float result = analogRead(A4);
+  Serial.println(result);
+  delay(250);
+}
+```
+
+3. Finally, we integrated this code to our existing robot. For simplicity, we decided to make the robot simply stop when the IR LED is detected, and for further physical evidence that it worked, we displayed messages and values to the Serial monitor.
+<iframe width="560" height="315" src="https://www.youtube.com/embed/cUcO9T2N2Uw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+# Process DFS
 1. We decided to use DFS instead of BFS. From lecture and researching more online, BFS has the risk of taking up too much memory on the Arduino; the Arduino memory capacity is quite small, so we opted for DFS. 
 
 2. To implement DFS, we decided that we needed a stack to push our visited nodes, a boolean array that represents the whole grid and represents which nodes had already been visited, and a node type that contains x and y coordinates. We also realized that keeping track of cardinal directions was important; DFS depends on orientation and the priority of cardinal directions, so keeping track of the robot's local cardinal direction would make it easier to know which way to turn. Finally, a boolean value called backtrack was necessary to keep track of whether the robot is in DFS mode or backtrack mode.
@@ -93,6 +111,7 @@ node next_node = stack.peek();
 ```
 
 5. Finally, the robot only reaches a stop when the stack is empty. The very first node that is added onto the stack is the origin node, and when the robot finished exploring the maze, it will backtrack, meaning it will pop the nodes off the stack and traverse all the nodes. Because of this design, when the stack is empty, the robot should stop at the origin node. 
+
 ```c
 if (stack.isEmpty())
     {
