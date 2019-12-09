@@ -33,10 +33,8 @@ int Z = 0;
 
 int distanceThreshold = 20;
 
-int intersectPin = 2;
-int leftPin = 4;
-int forPin = 3;
-int rightPin = 8;
+int finishPin = 2;
+int push_button = 3;
 
 int current_dir;
 // dir
@@ -63,7 +61,7 @@ bool back_track;
 
 float ptValue = 0;
 
-bool is_in_backtrack = false;
+bool can_start = false;
 
 node previous_node;
 
@@ -89,10 +87,7 @@ void setup()
   current_node.y = 1;
   visited_nodes[0][0] = true;
   // LED pin
-  pinMode(intersectPin, OUTPUT);
-  pinMode(leftPin, OUTPUT);
-  pinMode(forPin, OUTPUT);
-  pinMode(rightPin, OUTPUT);
+  pinMode(finishPin, OUTPUT);
   // Prepare address pins for output
   pinMode(addressX, OUTPUT);
   pinMode(addressY, OUTPUT);
@@ -118,15 +113,16 @@ void setup()
   //Define threshold of the Robot (Varies day to day)
   int i = 0;
   int temp = 0;
-  float temp2 = 0;
   while (i < 50)
   {
     temp += analogRead(A0);
     i++;
   }
-  threshold = temp / 50 + 500;
+  threshold = temp / 50 + 400;
   Serial.print("Threshold: ");
   Serial.println(threshold);
+
+  pinMode(push_button, INPUT);
 }
 
 // checks if light is on the line or not (works)
@@ -148,8 +144,8 @@ boolean isWall(int sensorDistance)
 //servo functions
 void goFor()
 {
-  servoR.write(81);
-  servoL.write(99);
+  servoR.write(70);
+  servoL.write(110);
 }
 void goBack()
 {
@@ -172,7 +168,7 @@ void slightRight()
 void hardRight()
 {
   servoR.write(95);
-  servoL.write(95);
+  servoL.write(97);
 }
 
 void slightLeft()
@@ -183,7 +179,7 @@ void slightLeft()
 
 void hardLeft()
 {
-  servoR.write(85);
+  servoR.write(83);
   servoL.write(85);
 }
 
@@ -229,11 +225,10 @@ int getL()
 
 void turnLeft()
 {
-  digitalWrite(leftPin, HIGH);
   goFor();
-  delay(500);
+  delay(400);
   hardLeft();
-  delay(500);
+  delay(700);
   R = getR();
   while (!isOn(R))
   {
@@ -244,11 +239,10 @@ void turnLeft()
 
 void turnRight()
 {
-  digitalWrite(rightPin, HIGH);
   goFor();
-  delay(500);
+  delay(400);
   hardRight();
-  delay(500);
+  delay(700);
   L = getL();
   while (!isOn(L))
   {
@@ -259,7 +253,6 @@ void turnRight()
 
 void uTurn()
 {
-  digitalWrite(leftPin, HIGH);
   goFor();
   delay(250);
   servoR.write(84);
@@ -305,30 +298,27 @@ back track, and updates current_node to the tile it will travel to and heads in 
 direction
 - if it needs to backtrack, current_node won't be updated, won't be pushed, and back_track will be 
 set to true 
-- is_in_backtrack is helpful and will make robot detection code easier
-  - basically, the value is sustained when the robot travels between nodes, and can only update at intersections
-  - false if travelling because of exploration, true if travelling because of backtrack
  */
 void dfs()
 {
-  is_in_backtrack = false;
   Serial.println("Is on Intersect");
-  digitalWrite(intersectPin, HIGH);
   goStop();
-  delay(250);
   visited_nodes[current_node.x][current_node.y] = true;
+  if (detect(ptValue))
+  {
+    
+  }
   // current_dir = NORTH
   if (current_dir == 0)
   {
     // north, go north
-    if (!isWall(distC) && visited_nodes[current_node.x][current_node.y + 1] == false)
+    if (!isWall(distC) && visited_nodes[current_node.x][current_node.y + 1] == false && !detect(ptValue))
     {
       Serial.println("DFS, North head North");
       Serial.println();
       current_dir = 0;
       stack.push(current_node);
       current_node.y = current_node.y + 1;
-      digitalWrite(forPin, HIGH);
       goFor();
       delay(250);
     }
@@ -366,14 +356,13 @@ void dfs()
   else if (current_dir == 1)
   {
     // east, go forward to east
-    if (!isWall(distC) && visited_nodes[current_node.x + 1][current_node.y] == false)
+    if (!isWall(distC) && visited_nodes[current_node.x + 1][current_node.y] == false && !detect(ptValue))
     {
       Serial.println("DFS, East head East");
       Serial.println();
       current_dir = 1;
       stack.push(current_node);
       current_node.x = current_node.x + 1;
-      digitalWrite(forPin, HIGH);
       goFor();
       delay(250);
     }
@@ -411,14 +400,13 @@ void dfs()
   else if (current_dir == 2)
   {
     //south, go forward to go south
-    if (!isWall(distC) && visited_nodes[current_node.x][current_node.y - 1] == false)
+    if (!isWall(distC) && visited_nodes[current_node.x][current_node.y - 1] == false && !detect(ptValue))
     {
       Serial.println("DFS, South head South");
       Serial.println();
       current_dir = 2;
       stack.push(current_node);
       current_node.y = current_node.y - 1;
-      digitalWrite(forPin, HIGH);
       goFor();
       delay(250);
     }
@@ -456,14 +444,13 @@ void dfs()
   else if (current_dir == 3)
   {
     //west, go for to go west
-    if (!isWall(distC) && visited_nodes[current_node.x - 1][current_node.y] == false)
+    if (!isWall(distC) && visited_nodes[current_node.x - 1][current_node.y] == false && !detect(ptValue))
     {
       Serial.println("DFS, West head West");
       Serial.println();
       current_dir = 3;
       stack.push(current_node);
       current_node.x = current_node.x - 1;
-      digitalWrite(forPin, HIGH);
       goFor();
       delay(250);
     }
@@ -505,14 +492,15 @@ How Backtrack works:
 pops the next_node it will go to from the stack
 - back_track can only switch to true at intersection since back_track is toggled by dfs which
 is only called at intersections
-- is_in_backtrack is there to make robot detection code easier
-  - if the robot is traveling because of the BT function, it will remain true until it hits another intersection
-  - it will then turn false because DFS will be called, but will turn true again if BT needs to be continued
  */
 void backtrack()
 {
-  is_in_backtrack = true;
   Serial.println("in backtrack");
+  if (detect(ptValue))
+  {
+    stack.push(current_node);
+    stack.push(previous_node);
+  }
   node next_node = stack.peek();
   previous_node = current_node;
   //north
@@ -526,7 +514,6 @@ void backtrack()
       current_dir = 0;
       current_node = stack.pop();
       back_track = false;
-      digitalWrite(forPin, HIGH);
       goFor();
       delay(200);
     }
@@ -582,7 +569,6 @@ void backtrack()
       current_dir = 1;
       current_node = stack.pop();
       back_track = false;
-      digitalWrite(forPin, HIGH);
       goFor();
       delay(200);
     }
@@ -648,7 +634,6 @@ void backtrack()
       current_dir = 2;
       current_node = stack.pop();
       back_track = false;
-      digitalWrite(forPin, HIGH);
       goFor();
       delay(200);
     }
@@ -695,7 +680,6 @@ void backtrack()
       current_dir = 2;
       current_node = stack.pop();
       back_track = false;
-      digitalWrite(forPin, HIGH);
       turnLeft();
       delay(200);
     }
@@ -704,18 +688,22 @@ void backtrack()
 // true if robot detected, false otherwise
 bool detect(float ptValue)
 {
-  if (ptValue > 300)
+  if (ptValue > 120)
   {
+    digitalWrite(finishPin,HIGH);
     return true;
   }
   return false;
 }
 void loop()
 {
-  digitalWrite(intersectPin, LOW);
-  digitalWrite(forPin, LOW);
-  digitalWrite(leftPin, LOW);
-  digitalWrite(rightPin, LOW);
+  while (can_start == false)
+  {
+    Serial.println("Can't start");
+    goStop();
+    can_start = digitalRead(push_button);
+  }
+  digitalWrite(finishPin, LOW);
   int sensorVal[totalChannels];
 
   // values for line sensors
@@ -746,15 +734,7 @@ void loop()
     float volt = analogRead(A0) * 0.0048828125;
     sensorVal[i] = 13 * pow(volt, -1);
   }
-  X = bitRead(6, 0);
-  Y = bitRead(6, 1);
-  Z = bitRead(6, 2);
-
-  digitalWrite(addressX, X);
-  digitalWrite(addressY, Y);
-  digitalWrite(addressZ, Z);
-
-  ptValue = analogRead(A0);
+  ptValue = analogRead(A5);
 
   // line sensors
   C = sensorVal[0];
@@ -777,20 +757,6 @@ void loop()
   {
     slightRight();
   }
-  if (detect(ptValue))
-  {
-    current_dir = (current_dir + 2) % 4;
-    if (is_in_backtrack == false)
-    {
-      current_node = stack.pop();
-    }
-    else
-    {
-      stack.push(current_node);
-      current_node = previous_node;
-    }
-    uTurn();
-  }
   //debug back_track
   // reaches intersection, make turn decision
   if (isOn(C) && isOn(R) && isOn(L))
@@ -811,6 +777,7 @@ void loop()
     //finished?
     while (stack.isEmpty())
     {
+      
       C = getC();
       L = getL();
       R = getR();
@@ -828,6 +795,7 @@ void loop()
       {
         goStop();
         Serial.println("Done");
+        digitalWrite(finishPin, HIGH);
       }
     }
   }
