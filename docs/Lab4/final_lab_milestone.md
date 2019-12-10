@@ -150,7 +150,12 @@ while (stack.isEmpty())
 
 ### 7. Robot Sensing and Avoidance
 
-[Go here for Robot Sensing and Avoidance from Milestone 4 Portion](#Process:-Acting-Upon-Robot-Detection)
+[Go here for Robot Sensing and Avoidance from Milestone 4 Portion](#process-acting-upon-robot-detection)
+
+### 8. Navigation Algorithm, Finish LED
+We decided that DFS was the best way to explore the maze efficiently. It meant that it would try to traverse long distances and it would want to make fewer turns opposed to BFS. To implement DFS, we first created a boolean array `visited_nodes`, a stack array 'stack', and a boolean value 'backtrack'. Our prioritization was North, East, South, and West. The robot would swap between line following functions and DFS; line following is only used when traversing a line and DFS is called at intersections.
+
+When the Robot enters DFS, it first marks the `current_node` as visited in the array. It then checks the `current_dir` and decides an action from there. Regardless of the `current_dir`, the robot will first try to 
 
 ## Process: Acting Upon Robot Detection
 
