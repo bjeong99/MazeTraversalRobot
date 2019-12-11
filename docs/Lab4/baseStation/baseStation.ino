@@ -221,10 +221,10 @@ void Data_Interpreter( int info_received )
   int buff[4];
   Serial.print(ori);
   switch(ori){
-        case 0: buff[0] = wall[0]; buff[1] = wall[1]; buff[2] = wall[2]; buff[3] = wall[3];
-        case 1: buff[0] = wall[3]; buff[1] = wall[0]; buff[2] = wall[1]; buff[3] = wall[2];
-        case 2: buff[0] = wall[2]; buff[1] = wall[3]; buff[2] = wall[0]; buff[3] = wall[1];
-        case 3: buff[0] = wall[1]; buff[1] = wall[2]; buff[2] = wall[3]; buff[3] = wall[0];
+        case 0: buff[0] = wall[0]; buff[1] = wall[1]; buff[2] = wall[2]; buff[3] = wall[3]; break;
+        case 1: buff[0] = wall[3]; buff[1] = wall[0]; buff[2] = wall[1]; buff[3] = wall[2]; break;
+        case 2: buff[0] = wall[2]; buff[1] = wall[3]; buff[2] = wall[0]; buff[3] = wall[1]; break;
+        case 3: buff[0] = wall[1]; buff[1] = wall[2]; buff[2] = wall[3]; buff[3] = wall[0]; break;
   }
   
   for (int j = 0; j < 4; j++){
@@ -367,7 +367,7 @@ void setup(void)
 
 
 
-  radio.printDetails();
+  //radio.printDetails();
 
 }
 
@@ -386,6 +386,7 @@ void loop(void)
     // if there is data ready
     if ( radio.available() )
     {
+      Serial.print("FUCK");
       // Dump the payloads until we've gotten everything
       volatile int data_received;
       bool done = false;
@@ -393,6 +394,7 @@ void loop(void)
       {
         // Fetch the payload, and see if this was the last one.        
         done = radio.read( &data_received, 2 * sizeof( byte ) );
+
         Data_Interpreter(data_received);
         
         delay(20);
