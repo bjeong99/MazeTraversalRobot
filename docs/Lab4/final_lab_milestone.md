@@ -156,7 +156,7 @@ role_e role = role_pong_back;
 ```
 
 In the void setup, we define certain parameters of the radio using the public member functions of the RF24 class. This includes setRetries, setAutoAck, setChannel, setPALevel, setDataRate, and setPayloadSize. setRetries determines the time delay of resending a dropped packet and the number of retries to send a packet. setAutoAck enables or disables auto-acknowledge packets, setChannel defines what channel we send information on, setPALevel sets the power level we use for our radio signal. 
-`c
+```c
 radio.begin();
 radio.setRetries( 15, 15 );
 radio.setChannel( 0x50 );
@@ -164,19 +164,19 @@ radio.setPALevel( RF24_PA_MIN);
 radio.setDataRate( RF24_250KBPS );
 radio.setPayloadSize( 8 );
 radio.setAutoAck( true );
-`
+```
 To send and receive data, we use the radio.read() and radio.write member functions of RF24. For this example, we send  a timestamp.
-`c
+```c
 /*Send code*/
 unsigned long time = millis();
 bool ok = radio.write( &time, sizeof( unsigned long ) );
 /*Receive code*/
 unsigned long got_time;
 radio.read( &got_time, sizeof( unsigned long ) );
-`
+```
 
 Next, we sent a 25 element unsigned char maze. The only difference is that we change setPayloadSize to 25 and the radio.write function
-``c
+```c
 /*Send code*/
 unsigned char maze[5][5] = 
 {
@@ -190,7 +190,7 @@ bool ok = radio.write( &maze, 25*sizeof( unsigned char ) );
 /*Receive Code*/
 unsigned char data_received[5][5];
 radio.read( &data_received, 25*sizeof( unsigned char ) );
-``
+```
 For our robot transmission code, we declared a radio_transmitter function, which would be called at each intersection of the maze. Since we only want this robot to transmit, we do not need any of the receiver code, only the transmission code. We send a two byte packet which includes the current location ( x and y ), whether a wall is detected, and the orientation of the robot.  
 ## Process: Base Station
 
