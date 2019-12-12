@@ -146,6 +146,48 @@ In backtrack, it will peek at the node on top of the stack and declare it as `ne
 
 ### 10. Wireless Communication
 
+To send information from the robot to the base station, we need to use a radio transceiver on pins 9-13 and GND pins of Arduino. We first must interpret the data from the robot. This is done by creating a two bye packet. We created a separate function which is called at every intersection called radio_transmitter().
+
+```c
+void radio_transmitter()
+{
+  bool wallC = isWall(distC);
+  bool wallL = isWall(distL);
+  bool wallR = isWall(distR);
+  
+  int wall_value = get_wall_cases(wallC, wallL, wallR );
+  radio.stopListening();
+  bool ok;
+  int data_packet = (current_dir<<12) | (current_node.x<<8) | (current_node.y<<4) | wall_value;
+  ok = radio.write( &data_packet, 2 * sizeof( byte ) );
+  radio.setAutoAck( true );
+  radio.startListening();
+}
+```
+We created a helper function called get_wall_cases, which is a series of conditional statements which return a value for wall detection. These values range from 0 to 7. We define integer values to wall_value which are then placed in data_packet. 
+
+```c
+int get_wall_cases( bool wallC, bool wallL, bool wallR )
+{
+  if( wallL && !wallC && !wallR )
+    return 1;
+  else if( !wallL && !wallC && wallR )
+    return 2;
+  else if( wallL && !wallC && wallR )
+    return 3;
+  else if( !wallL && wallC && !wallR )
+    return 4;
+  else if( wallL && wallC && !wallR )
+    return 5;
+  else if( !wallL && wallC && wallR )
+    return 6;
+  else if( wallL && wallC && wallR )
+    return 7;
+  else
+    return 0;
+}
+```
+This piece of code interprets wall sensor data and transmits two bytes from the robot to the base station.
 ## Process: Base Station
 
 
