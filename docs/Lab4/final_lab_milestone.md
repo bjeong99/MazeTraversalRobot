@@ -145,7 +145,53 @@ In backtrack, it will peek at the node on top of the stack and declare it as `ne
 ### 9. FPGA/Base Station
 
 ### 10. Wireless Communication
+For the wireless communication of the robot to the base station, we needed to use the nRF24L01 2.4 GHz radio transceiver. This radio transceiver is placed on Arduino digital pins 9-13, and the GND pin of the base station and robot Arduino. The first step is to download the RF24 libraries. This includes RF24.h, Serial.h, RF24.cpp, and nRF24L01.h. Afterwards, we downloaded the Getting Started sketch for Arduino. This Getting Started sketch sends a timestamp transmission to the second radio transceiver, which then sends a response back with the time difference. 
 
+In the Getting Started sketch, we instantiate our RF24 class with on SPI bus and pins 9,10. We then define an array long integers called pipes. Using the equation 2(3D + N) + X, and knowing that D=0 and N=4 for group 4, we get our value in pipes should be 8 and 9, respectively.
+```c
+RF24 radio( 9, 10 );
+const uint64_t pipes[2] = { 0x0000000008LL, 0x0000000009LL };
+typedef enum { role_ping_out = 1, role_pong_back ) role_e;
+role_e role = role_pong_back;
+```
+
+In the void setup, we define certain parameters of the radio using the public member functions of the RF24 class. This includes setRetries, setAutoAck, setChannel, setPALevel, setDataRate, and setPayloadSize. setRetries determines the time delay of resending a dropped packet and the number of retries to send a packet. setAutoAck enables or disables auto-acknowledge packets, setChannel defines what channel we send information on, setPALevel sets the power level we use for our radio signal. 
+`c
+radio.begin();
+radio.setRetries( 15, 15 );
+radio.setChannel( 0x50 );
+radio.setPALevel( RF24_PA_MIN);
+radio.setDataRate( RF24_250KBPS );
+radio.setPayloadSize( 8 );
+radio.setAutoAck( true );
+`
+To send and receive data, we use the radio.read() and radio.write member functions of RF24. For this example, we send  a timestamp.
+`c
+/*Send code*/
+unsigned long time = millis();
+bool ok = radio.write( &time, sizeof( unsigned long ) );
+/*Receive code*/
+unsigned long got_time;
+radio.read( &got_time, sizeof( unsigned long ) );
+`
+
+Next, we sent a 25 element unsigned char maze. The only difference is that we change setPayloadSize to 25 and the radio.write function
+``c
+/*Send code*/
+unsigned char maze[5][5] = 
+{
+   3,3,3,3,3,
+   3,1,1,1,3,
+   3,2,0,1,2,
+   3,1,3,1,3,
+   3,0,3,1,0,
+};
+bool ok = radio.write( &maze, 25*sizeof( unsigned char ) );
+/*Receive Code*/
+unsigned char data_received[5][5];
+radio.read( &data_received, 25*sizeof( unsigned char ) );
+``
+For our robot transmission code, we declared a radio_transmitter function, which would be called at each intersection of the maze. Since we only want this robot to transmit, we do not need any of the receiver code, only the transmission code. We send a two byte packet which includes the current location ( x and y ), whether a wall is detected, and the orientation of the robot.  
 ## Process: Base Station
 
 
@@ -172,7 +218,7 @@ bool detect(float ptValue)
 ```
 
 ### 2. Brainstorm for Algorithms
-   We realized that with our DFS code, we woul dhave to create two different solutions to robot detection since the actions between DFS and backtrack are very different.
+   We realized that with our DFS code, we would have to create two different solutions to robot detection since the actions between DFS and backtrack are very different.
 
 ### 3. Robot Detection During DFS
 For DFS, the most efficient way was to think of a robot as a wall. When it senses another robot, it will proceed DFS but in another prioritized direction. For instance, if the robot is facing north and detects a robot in front of it, it will head east (east has higher priority over west) and continue DFS. Eventually, when the robot enters backtrack, it will continue DFS to the node that it had to miss.
