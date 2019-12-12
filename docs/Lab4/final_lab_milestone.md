@@ -16,23 +16,7 @@
 ## Process: Full Robotic Integration
 
 ### 1. Motor Control
-For motor contro, we used two Parallax servos attached to the robot. We would attach the Arduino pin to the Servo in `setup()` and set values to it with 90 being stop.
-
-```c
-void loop() {
-  // put your main code here, to run repeatedly:
-  motorR.write(70);
-  motorL.write(110);
-  delay(1000);
-
-  motorR.write(90);
-  motorL.write(90);
-  delay(1000);
-  
-  motorR.write(110);
-  motorL.write(70);
-}
-```
+For motor contro, we used two Parallax servos attached to the robot. We would attach the Arduino pin to the Servo in `setup()` and set values to it with 90 being stop. For example, our forward function set the servos to `servoR.write(70)` and `servoL.write(110)`. The various functions to make the robot go forward and turn are apparent in our various videos. 
 
 ### 2. FFT: Tone Sensing
 
@@ -56,7 +40,7 @@ This while loop is written in the loop function, and it will be stuck in this wh
 
 ### 5. Line Sensing and Following
 
-We used three line sensors in front of the robot. They were spread far enough apart that the distance between two sensors is about the width of the line. When testing with the Arduino, the sensors would return a low analog value on the white line and a high analog value on darker surfaces. To make it easier to find the threshold, we decided to average a sample in the setup function.
+We used three line sensors in front of the robot. They were spread far enough apart that the distance between two sensors is about the width of the line. To make it easier to find the threshold, we decided to average a sample in the setup function.
 
 ```c
 while (i < 50)
@@ -83,8 +67,7 @@ if (isOn(C) && !isOn(L) && !isOn(R))
     slightRight();
   }
 ```
-Once line following was figured out, we had to battle turning at intersections. When it is at an intersection, all three line sensors must sense white, so we implemented turning functions that would only be called on intersections. Because using time delays were very inaccurate, we decided to call the turn function and continue to line following when the sensors detected another line.
-Below is our turn left function that adds a delay to avoiding detecting the line it was following previously, and then checks if the sensors detects a line, which would be one of the perpendicular lines.
+When it is at an intersection, all three line sensors must sense white, so we implemented turning functions that would only be called on intersections. Because using time delays were very inaccurate, we decided to call the turn function and continue to line following when the sensors detected another line.
 
 ```c
 void turnLeft()
@@ -114,7 +97,7 @@ boolean isWall(int sensorDistance)
 }
 ```
 
-We used this boolean function to check whereh the walls are around the robot. We only check the location of walls at intersections since we can only turn to avoid walls on intersections. For example, if we detect a wall in front and to the left of the robot, we would choose to turn right unless that node has already been visited, in which the robot would enter backtrack mode.
+We used this boolean function to check where the walls are around the robot. We only check the location of walls at intersections since we can only turn to avoid walls on intersections.
 
 In the navigation code, we use a matrix of boolean values the size of the maze to represent visited nodes and a stack array. Whenever the node is visited, that node is added to the stack and the boolean value of that coordinate in visited is set to true . The nodes in the stack then get popped when the robot enters backtrack mode and travels to the popped nodes to go back to the origin. To deal with unexplorable nodes, we would check whether the stack is empty rather than checking if all the elements in the visited array are set to true. The stack would only be empty when the robot has finished backtracking and is back at the origin.
 
@@ -153,11 +136,18 @@ while (stack.isEmpty())
 [Go here for Robot Sensing and Avoidance from Milestone 4 Portion](#process-acting-upon-robot-detection)
 
 ### 8. Navigation Algorithm, Finish LED
-We decided that DFS was the best way to explore the maze efficiently. It meant that it would try to traverse long distances and it would want to make fewer turns opposed to BFS. To implement DFS, we first created a boolean array `visited_nodes`, a stack array 'stack', and a boolean value 'backtrack'. Our prioritization was North, East, South, and West. The robot would swap between line following functions and DFS; line following is only used when traversing a line and DFS is called at intersections.
+We decided that DFS was the best way to explore the maze efficiently. To implement DFS, we first created a boolean array `visited_nodes`, a stack array 'stack', and a boolean value 'backtrack'. Our prioritization was North, East, South, and West. The robot would swap between line following functions and DFS; line following is only used when traversing a line and DFS is called at intersections.
 
 When the Robot enters DFS, it first marks the `current_node` as visited in the array. It then checks the `current_dir` and decides an action from there. Regardless of the `current_dir`, the robot will first try to continue heading in the forward direction. If there is a wall or robot in its path, it will then turn to the next available node, in priority order of North, East, South, and West. If the robot has to turn backward, it will exit DFS and perform no action except changing `back_track` to true. Then, the code will exit back to loop but will immediately jump to the code when all line sensors are active (the process through DFS is very fast and has virtually no delay so the robot is still on the intersection). However, now that `back_track` is true, it will jump to the backtrack() function.
 
-In backtrack, it will peek at the node on top of the stack and declare it as `next_node`. 
+In backtrack, it will peek at the node on top of the stack and declare it as `next_node`. Depending on the robot's direction, it will compare the relative direction of the next node to the current node. All nodes in the stack are one tile away from each other, and the robot will decide which way to turn to reach that next tile. We then turn `backtrack = false` when it makes that decision. We do this because there is a possibility that in backtracking, the robot can continue DFS to unvisited nodes, but if the surrounding nodes are already visited, DFS will turn `backtrack = true` again and backtrack will continue. 
+
+### 9. FPGA/Base Station
+
+### 10. Wireless Communication
+
+## Process: Base Station
+
 
 ## Process: Acting Upon Robot Detection
 
@@ -222,4 +212,6 @@ Here, when another robot is detected, it will push the current node and the prev
 ### 5. Video Demonstration
 Here is a video that demonstrates the robot's actions when it detects a robot during its DFS and during its backtrack mode.
 
-***include video here***
+<iframe width="560" height="315" src="https://www.youtube.com/embed/OS-aU18pEH4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+The green LED lights up when it detects another robot (in our case, an IR emitter circuit) and the robot will continue DFS. The robot will only turn when it detects another robot at less than a foot away. We thought it was unnecssary to detect another robot that is further than an intersection away because the robot would take an unnecessary turn that would add time cost and we expect that when our robot continues and the opposing robot reaches the intersection, that robot would detect our robot and avoid it. We were able to have our circuit detect IR emitters more than a foot away as shown in our previous milestone. 
