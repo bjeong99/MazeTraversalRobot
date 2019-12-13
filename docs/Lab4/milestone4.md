@@ -1,3 +1,7 @@
+# Milestone 4
+
+Objective: Have the base station display update in a basic way , communicate information with the robot, and implement robot detection.
+
 ## Process: Acting Upon Robot Detection
 
 ### 1. Robot Detection Circuit
