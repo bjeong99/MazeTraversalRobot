@@ -29,7 +29,7 @@ void setup() {
 void loop() {
   while(1) { // reduces jitter
     cli();  // UDRE interrupt slows this way down on arduino1.0
-    for (int i = 0 ; i < 256 ; i += 2) { // save 256 samples
+    for (int i = 0 ; i < 128 ; i += 2) { // save 256 samples
       while(!(ADCSRA & 0x10)); // wait for adc to be ready
       ADCSRA = 0xf5; // restart adc
       byte m = ADCL; // fetch adc data
