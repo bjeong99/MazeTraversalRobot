@@ -42,7 +42,7 @@ if( fft_log_out[12] - fft_log_out[13] > 3 && fft_log_out[12] - fft_log_out[11] >
   digitalWrite( 3, HIGH );
 }
 ```
-If those conditiona are met, we know that there is a strong signal in the range of 901 and 976 Hz, so we set pin 3 to HIGH, thus indicating we have a tone of frequency 950 Hz.
+If those conditions are met, we know that there is a strong signal in the range of 901 and 976 Hz, so we set pin 3 to HIGH, thus indicating we have a tone of frequency 950 Hz.
 
 ### 3. Robot Starts when it detects 950 Hz
 
