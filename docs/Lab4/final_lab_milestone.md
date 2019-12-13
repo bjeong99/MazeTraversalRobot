@@ -52,6 +52,14 @@ To get our robot to detect the 950 Hz signal, we need to amplify our signal usin
 	<a>Microphone Circuit</a>
 </p>
 
+The schematic shown below is the circuit used for the microphone. Initally, the signal is passed through an RC with a very low frequency cutoff, acting as an ac coupler. After the RC filter, there is a resistor divider that biases the circuit at 2.5V. This then passes into an op amp in a non-inverting configuration with a gain of 10 with a DC offset of 2.5V. 
+
+<p align="center">
+	<img src="opamp.png" height="60%" width="60%">
+        <br>
+	<a>Microphone Circuit</a>
+</p>
+
 This Circuit was placed on a protoboard on our robot, pictured below.
 <p align="center">
 	<img src="Microphone Circuit on Robot.jpg" height="60%" width="60%">
