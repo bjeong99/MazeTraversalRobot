@@ -450,4 +450,9 @@ int get_wall_cases( bool wallC, bool wallL, bool wallR )
 ```
 This piece of code interprets wall sensor data and transmits two bytes from the robot to the base station.
 
+### Full Integration Video
+With all these components combined we were able to get the robot to traverse a maze and fully draw it out.
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ZRnJ6TjiB80" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/FoZ5C8XUYHY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
