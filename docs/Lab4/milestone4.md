@@ -72,128 +72,7 @@ The green LED lights up when it detects another robot (in our case, an IR emitte
 
 ## Basestation integration
 
-### 1. FPGA wall display
-
-Displaying the maze of the FPGA requires the creation of two main IP blocks, a receiver that will take in information from the basestation Arduino as well as a block that will interpret that information and then write it to the video memory so it can be displayed. 
-
-The connection between the Arduino and FPGA was handled via a parallel bus. The bus was 9 bits wide, with one bit functioning as the clock for the connection. To communicate a byte with the FPGA, first one would have to drive the data lines to the desired value, the clock and hold while the FPGA wrote to memory. This was implemented on the FPGA with a synchronizer shown below
-
-```verilog
-  assign mcuVLD = GPIO_1_D[33];
-  assign mcuDINw = {GPIO_1_D[25], GPIO_1_D[26], GPIO_1_D[27], GPIO_1_D[28], GPIO_1_D[29], GPIO_1_D[30], GPIO_1_D[31], GPIO_1_D[32]};
-  assign writeVALID = (~mcuVLDedge && mcuVLD);
-
-  always @ ( posedge c2_sig)  begin
-    if( ~KEY[0] ) mcuVLDedge <= 1'b0;
-    else mcuVLDedge <= mcuVLD;
-  end
-
-  always @ ( posedge c2_sig ) begin
-    if (~KEY[0] ) mcuDIN <= 0;
-    else if (mcuVLD) mcuDIN <= mcuDINw;
-    else mcuDIN <= mcuDIN;
-  end
-```
-
-Once the information was received on the FPGA, the data needed to be processed. The format of the packet from the Arduino is show in the figure below.
-
-![Radio Packet](packet.png)
-
-The first cycle after the arduino drives the clock high, the FPGA latches the X, Y, and wall position from the arduino. The X and Y values are offset and the multiplied to get the proper pixel orientation on the sceen. A diagram of our gridlines are shown below. 
-
-![Display Grid](grid.png)
-
-The background for the display is hard coded into the FPGA, only allowing a memory write on addresses that do not fall onto the grid. This is to ensure that the grid is persistant on reset and cannot be over written by a write to memory. This also gave an easy armature to draw the walls about. The code for drawing the background grid is shown below.
-
-```verilog
-always @ (c1_sig) begin
-	if (VGA_READ_MEM_EN) begin
-		if (VGA_PIXEL_X == 40 || VGA_PIXEL_X == 80 || VGA_PIXEL_X == 120 || VGA_PIXEL_X == 160 || VGA_PIXEL_X == 200 || VGA_PIXEL_X == 240 || VGA_PIXEL_X == 280 || VGA_PIXEL_X == 320 || VGA_PIXEL_X == 360) begin
-			displayColor <= 8'hff;
-		end else if (VGA_PIXEL_Y == 40 || VGA_PIXEL_Y == 80 || VGA_PIXEL_Y == 120 || VGA_PIXEL_Y == 160 || VGA_PIXEL_Y == 200 || VGA_PIXEL_Y == 240 || VGA_PIXEL_Y == 280 || VGA_PIXEL_Y == 320 || VGA_PIXEL_Y == 360) begin
-			displayColor <= 8'hff;
-		end else begin
-			displayColor <= MEM_OUTPUT;
-		end
-	end else begin
-		displayColor <= 8'hff;
-	end
-end
-```
-
-Once these values are latched, the FPGA begins iterating over the pixels that are contained in the block surrounding the robots position left to right, top to bottom. Depending on the value of the wall passed into the FPGA, the FGPA only writes memory on the pixel where the wall is intended to be positioned. This is done by only driving the W_EN wire to the MK9 memory high once the X_ADDR and Y_ADDR are in the correct loction in the sweep. Once the FPGA finishes its iteration of the entire block, it raises a WRITE_DONE flag so that the unit knows to stop and wait for the next incoming byte. This unit is shown in the verilog code below.
-
-```verilog
-
-///// Decode the incoming bit /////
-always @ (posedge c2_sig) begin
-	if (~KEY[0]) // On rest
-		begin
-			X_ADDR <= 0;
-			Y_ADDR <= 0;
-			W_DONE <= 1'b0; // Not done (haven't started)
-		end
-	else if (writeVALID) // Latch values on rising clock edge
-		begin
-			X_ADDR <=  20 + (mcuDIN[5:3] * 40);
-			Y_ADDR <=  20 + (mcuDIN[2:0] * 40);
-			W_DONE <= 1'b0; //Not done
-		end
-	else if (~W_DONE && mcuVLD) //Are we done yet?
-		begin
-		  // Conditional ensures that we are writing in the correct grid offset
-			if (X_ADDR >= 20 + 40 * mcuDIN[5:3] && X_ADDR <= 20 + 40 * (mcuDIN[5:3] + 1))
-				begin
-					case(mcuDIN[7:6])
-						2'b00: begin //TOP WALL
-									pixel_data_RGB332 <= RED;
-									W_EN <= (Y_ADDR == 20 + (mcuDIN[2:0] * 40)) ? 1:0;
-								 end
-						2'b01: begin //RIGHT WALL
-									pixel_data_RGB332 <= RED;
-									W_EN <= (X_ADDR == 20 + ((mcuDIN[5:3] + 1) * 40)) ? 1:0;
-								 end
-						2'b10: begin // BOTTOM WALL
-									pixel_data_RGB332 <= RED;
-									W_EN <= (Y_ADDR == 20 + ((mcuDIN[2:0] + 1) * 40)) ? 1:0;
-								 end
-						2'b11: begin // LEFT WALL
-									pixel_data_RGB332 <= RED;
-									W_EN <= (X_ADDR == 20 + (mcuDIN[5:3] * 40)) ? 1:0;
-								 end
-					endcase
-					X_ADDR <= X_ADDR + 1; //Pixel by pixel write to the dual port ram
-					Y_ADDR <= Y_ADDR;
-					W_DONE <= 1'b0;
-				 end
-			else if (Y_ADDR < 20 + ((mcuDIN[2:0] + 1) * 40) && Y_ADDR >= 20 + 40 * mcuDIN[2:0])
-				begin
-					Y_ADDR<= Y_ADDR + 1;				// Increment Y
-					X_ADDR <= 20 + (mcuDIN[5:3] * 40);  // Reset X
-					W_DONE <= 1'b0;
-					W_EN <= 1'b0;
-				end
-			else 
-				begin
-					X_ADDR <= 0;
-					Y_ADDR <= 0;
-					W_DONE <= 1'b1; //Finally we are done
-					W_EN <= 1'b0;
-					
-				end
-		end else begin
-			X_ADDR <= 0;
-			Y_ADDR <= 0;
-			W_DONE <= 1'b1;
-			W_EN <= 1'b0;
-		end
-end
-
-
-
-```
-
-### 2. Base Station Arduino Code
+### 1. Base Station Arduino Code
 
 The other half of the base station, the Arduino, handles radio communication with the robots as well as the majority of the data processing. The arduino first is connected to the FPGA using a parallel communication bus which uses nine GPIO pins. Below is the code used in the main lopp of the arduino to interface with the radio module.
 
@@ -262,7 +141,7 @@ Within the parallel write function, we write to each of the GPIO pins on the ard
       delay(10);
       digitalWrite(CLK, LOW); 
 ```
-### 3. Complete Integration Maze Mapping Videos
+### 2. Complete Integration Maze Mapping Videos
 
 <iframe width="560" height="315" src="https://www.youtube.com/watch?v=ZRnJ6TjiB80" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
