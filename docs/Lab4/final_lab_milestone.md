@@ -42,9 +42,22 @@ if( fft_log_out[12] - fft_log_out[13] > 3 && fft_log_out[12] - fft_log_out[11] >
   digitalWrite( 3, HIGH );
 }
 ```
-If those conditions are met, we know that there is a strong signal in the range of 901 and 976 Hz, so we set pin 3 to HIGH, thus indicating we have a tone of frequency 950 Hz.
-
+If those conditions are met, we know that there is a strong signal in the range of 901 and 976 Hz, so we set pin 3 to HIGH, thus indicating we have a tone of frequency 950 Hz. 
 ### 3. Robot Starts when it detects 950 Hz
+
+To get our robot to detect the 950 Hz signal, we need to amplify our signal using the op amp circuit pictured below
+<p align="center">
+	<img src="Microphone Circuit.jpg" height="60%" width="60%">
+        <br>
+	<a>Microphone Circuit</a>
+</p>
+
+This Circuit was placed on a protoboard on our robot, pictured below.
+<p align="center">
+	<img src="Microphone Circuit on Robot.jpg" height="60%" width="60%">
+	<br>
+	<a>Microphone Circuit on Robot</a>
+</p>
 
 ### 4. Override Button
 For testing in lab and in case the robot does not start with the 950 Hz tone, we attached an override button.
