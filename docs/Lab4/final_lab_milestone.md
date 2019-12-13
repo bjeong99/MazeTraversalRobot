@@ -16,7 +16,7 @@
 ## Process: Full Robotic Integration
 
 ### 1. Motor Control
-For motor contro, we used two Parallax servos attached to the robot. We would attach the Arduino pin to the Servo in `setup()` and set values to it with 90 being stop. For example, our forward function set the servos to `servoR.write(70)` and `servoL.write(110)`. The various functions to make the robot go forward and turn are apparent in our various videos. 
+For motor control, we used two Parallax servos attached to the robot. We would attach the Arduino pin to the Servo in `setup()` and set values to it with 90 being stop. For example, our forward function set the servos to `servoR.write(70)` and `servoL.write(110)`. The various functions to make the robot go forward and turn are apparent in our various videos. 
 
 ### 2. FFT: Tone Sensing
 In order to detect a specific frequency, we need to use Arduino's FFT library. One of the example sketches of the Arduino library is the fft_adc_serial.ino sketch. The FFT function works by using the analog to digital converter, determining the frequency of the signal, and placing the signal magnitude into the corresponding bin. We define the type of output and the number of bins using the following code. The code below uses the logarithmic output and defines the number of bins to 128 bins.
@@ -178,7 +178,41 @@ while (stack.isEmpty())
 
 ### 7. Robot Sensing and Avoidance
 
-[Go here for Robot Sensing and Avoidance from Milestone 4 Portion](#process-acting-upon-robot-detection)
+To sense other robots, we created a simple phototransistor circuit and would read the phototransistor values from the Arduino analog pin. 
+
+![alt text](https://www.electronicwings.com/public/images/user_images/images/Arduino/IR%20Communication/IR_Communication_1.png)
+
+We decided that we would implement two ways to detect robots, one when the robot is in DFS and one when its in backtrack mode.
+When it is in DFS, we decided to treat the opposing robot as a "wall", but it would not be recorded as a wall (since the IR phototransistor will pick up the IR emitter first and the wall sensor would not detect the robot as another a wall). We would then make the robot continue DFS to any other possible nodes.
+
+```c
+ // current_dir = NORTH
+  if (current_dir == 0)
+  {
+    // north, go north
+    if (!isWall(distC) && visited_nodes[current_node.x][current_node.y + 1] == false && !detect(ptValue))
+    {
+      Serial.println(F("DFS, North head North"));
+      Serial.println();
+      current_dir = 0;
+      stack.push(current_node);
+      current_node.y = current_node.y + 1;
+      goFor();
+      delay(250);
+    }
+```
+
+When it is in backtracking, it would loop back to the previous node and then continue backtracking.
+
+```c
+ if (detect(ptValue))
+  {
+    stack.push(current_node);
+    stack.push(previous_node);
+  }
+  node next_node = stack.peek();
+  previous_node = current_node;
+```
 
 ### 8. Navigation Algorithm, Finish LED
 We decided that DFS was the best way to explore the maze efficiently. To implement DFS, we first created a boolean array `visited_nodes`, a stack array 'stack', and a boolean value 'backtrack'. Our prioritization was North, East, South, and West. The robot would swap between line following functions and DFS; line following is only used when traversing a line and DFS is called at intersections.
