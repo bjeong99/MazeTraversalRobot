@@ -19,6 +19,30 @@
 For motor contro, we used two Parallax servos attached to the robot. We would attach the Arduino pin to the Servo in `setup()` and set values to it with 90 being stop. For example, our forward function set the servos to `servoR.write(70)` and `servoL.write(110)`. The various functions to make the robot go forward and turn are apparent in our various videos. 
 
 ### 2. FFT: Tone Sensing
+In order to detect a specific frequency, we need to use Arduino's FFT library. One of the example sketches of the Arduino library is the fft_adc_serial.ino sketch. The FFT function works by using the analog to digital converter, determining the frequency of the signal, and placing the signal magnitude into the corresponding bin. We define the type of output and the number of bins using the following code. The code below uses the logarithmic output and defines the number of bins to 128 bins.
+```c
+#define LOG_OUT 1
+#define FFT_N 128
+```
+
+For the Arduino, the ADC sampling rate is 9615 Hz, and we divide the sampling rate by the number of bins to determine which bin we put our signal in. Since we have 128 bins, we divide 9615 by 128 to see the frequency size of each bin. The frequency of 950 Hz fits in the 12th bin, since the 12th bin holds frequencies between 901.41 Hz and 976.52 Hz. 
+
+In the loop code, we take the fft_input and set all the odd valued indexes to 0. This is because this code puts real valued numbers in the even bins and imaginary numbers in the odd bins. We only want the magnitude of the real values, so we set the imaginary terms to 0. 
+```c
+for( int i = 0; i < 128, i+= 2 )
+{
+  /*code before fft_input code*/
+  fft_input[i] = k;
+  fft_inputi+1] = 0;
+}
+```
+After that, we set a conditional to check whether there is a tone in the 950 Hz range. We do this by setting a conditional on the fft_output whether it reaches a value of 80 and has a 3 difference from the neighboring bins, indicating a tone in that frequency range.
+```c
+if( fft_log_out[12] - fft_log_out[13] > 3 && fft_log_out[12] - fft_log_out[11] > 3 && fft_log_out[12] > 80 ){
+  digitalWrite( 3, HIGH );
+}
+```
+If those conditiona are met, we know that there is a strong signal in the range of 901 and 976 Hz, so we set pin 3 to HIGH, thus indicating we have a tone of frequency 950 Hz.
 
 ### 3. Robot Starts when it detects 950 Hz
 
